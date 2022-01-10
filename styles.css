@@ -37,3 +37,11 @@ body {
 .hover-tile {
   color: gray;
 }
+
+#victory-line {
+  position: absolute;
+  display: none;
+  height: 3px;
+  width: 270px;
+  background-color: blue;
+}
