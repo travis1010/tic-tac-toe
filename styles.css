@@ -1,0 +1,39 @@
+body {
+  margin: 0px;
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-board {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  height: 300px;
+  width: 300px;
+  gap: 0px;
+  border: 1px solid blue;
+}
+
+.game-tile {
+  font-family: sans-serif;
+  box-sizing: border-box;
+  border: 1px solid blue;
+  height: 100px;
+  width: 100px;
+  color: blue;
+  font-size: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-tile:hover {
+  cursor: pointer;
+}
+
+.hover-tile {
+  color: gray;
+}
