@@ -9,9 +9,24 @@
   <script src='script.js' defer></script>
 </head>
 <body>
-  <div id='game-board'>
+  <h1>Tic-Tac-Toe</h1>
+  <div id='game-board-container'>
+    <div id='victory-line'></div>
+    <div id='game-board'>
+    </div>
+  </div>
+  <div id="score-card">
     
   </div>
-  <div id='victory-line'></div>
+  <button id="new-game-btn" onclick="game.startGame()" class="game-btn">New Game</button>
+  <button id="change-name-btn" onclick="game.showNameForm()" class="game-btn">Change Name</button>
+  <button id="difficulty-btn" onclick="game.toggleDifficulty()" class="game-btn">Difficulty: Easy</button>
+  <div id='pop-up-name-form'>
+    <form id='change-name-form'>
+      <p>Whats your name?</p>
+      <input type='text' placeholder="Name" name='name'>
+      <button type='button' class="form-btn" onclick='game.changeName(this.form)'>Submit</button><button class="form-btn" onclick='game.hideNameForm()' type='button'>Cancel</button>
+    </form>
+  </div>
 </body>
 </html>

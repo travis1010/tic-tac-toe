@@ -1,10 +1,16 @@
 body {
   margin: 0px;
   height: 100vh;
-  background-color: black;
+  background-color: #121212;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: #BB86FC;
 }
 
 #game-board {
@@ -14,20 +20,27 @@ body {
   height: 300px;
   width: 300px;
   gap: 0px;
-  border: 1px solid blue;
+}
+
+#game-board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-tile {
   font-family: sans-serif;
   box-sizing: border-box;
-  border: 1px solid blue;
+  background-color: #242424;
+  border: 1px solid #121212;;
   height: 100px;
   width: 100px;
-  color: blue;
+  color: #03DAC6;
   font-size: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 6px;
 }
 
 .game-tile:hover {
@@ -41,7 +54,63 @@ body {
 #victory-line {
   position: absolute;
   display: none;
-  height: 3px;
+  height: 4px;
   width: 270px;
-  background-color: blue;
+  background-color: #BB86FC;
+}
+
+#score-card {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  color: #DCDCDC;
+  margin: 20px;
+}
+
+
+.game-btn {
+  width: 300px;
+  outline: none;
+  border: 2px solid #BB86FC;
+  background-color: #121212;
+  color: #DCDCDC;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: rgb(49, 49, 49);
+}
+
+#pop-up-name-form {
+  position: absolute;
+  display: none;
+  background-color: rgba(49, 49, 49, 0.5);
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+}
+
+#change-name-form {
+  width: 200px;
+  height: 200px;
+  background: black;
+  border: 2px solid blue;
+  color: #DCDCDC;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.form-btn {
+  width: 150px;
+  outline: none;
+  border: 2px solid blue;
+  background-color: black;
+  color: #DCDCDC;
+  padding: 3px;
 }
