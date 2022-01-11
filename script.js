@@ -1,3 +1,6 @@
+const userPlayer = createPlayer('Player', 'X', 0);
+const computerPlayer = createPlayer('Computer', 'O', 0);
+
 const gameBoard = (() => {
   const grid = [['', '', ''],
                 ['', '', ''],
@@ -96,8 +99,8 @@ const gameBoard = (() => {
     }
     //check if all tiles are filled
     if (grid.flat().every((tile) => tile != '')) {
-      game.userPlayer.addToScore(0.5);
-      game.computerPlayer.addToScore(0.5);
+      userPlayer.addToScore(0.5);
+      computerPlayer.addToScore(0.5);
       return true;
     }
     return false;
@@ -153,13 +156,13 @@ function createPlayer(name, char, score) {
 const AI = (() => {
 
     //to check if move would be a win
-    const resultsInWin = (y, x) => {
+    const resultsInWin = (char, y, x) => {
       let grid = deepCopy(gameBoard.grid);
-      grid[y][x] = 'O';
+      grid[y][x] = char;
       
       //check rows
       for (let i = 0; i < 3; i++) {
-        if (grid[i].every(tile => tile == 'O')) {
+        if (grid[i].every(tile => tile == char)) {
           return true;
         }
       }
@@ -169,28 +172,28 @@ const AI = (() => {
         for (let j = 0; j < 3; j++) {
           column.push(grid[j][i]);
         }
-        if (column.every(tile => tile == 'O')) {
+        if (column.every(tile => tile == char)) {
           return true;
         }
         
       }
       //check diagonals
-      if ((grid[0][0] === 'O') && (grid[1][1] === 'O') && (grid[2][2] === 'O')) {
+      if ((grid[0][0] === char) && (grid[1][1] === char) && (grid[2][2] === char)) {
         return true;
       }
-      if ((grid[0][2] === 'O') && (grid[1][1] === 'O') && (grid[2][0] === 'O')){ 
+      if ((grid[0][2] === char) && (grid[1][1] === char) && (grid[2][0] === char)){ 
         return true;
       }
 
       return false;
     }
 
-    const checkForWin = () => {
+    const checkForWin = (char) => {
       let moves = getLegalMoves();
       let winningMove = null;
       moves.forEach((move) => {
         console.log('testing', move);
-        if (resultsInWin(move[0], move[1])) {
+        if (resultsInWin(char, move[0], move[1])) {
           winningMove = move;
         }
       })
@@ -226,26 +229,16 @@ const AI = (() => {
     }
 })();
 
+
+
 const game = (() => {
-  const userPlayer = createPlayer('Player', 'X', 0);
-  const computerPlayer = createPlayer('Computer', 'O', 0);
+  
   let currentPlayer = userPlayer;
   let difficulty = 'Easy';
   
   const printCards = () => {
-    const scoreCard = document.getElementById('score-card');
-    while (scoreCard.firstChild) {
-      scoreCard.removeChild(scoreCard.firstChild);
-    }
-
-    const playerCard = document.createElement('div');
-    playerCard.textContent = `${userPlayer.name}: ${userPlayer.score}`;
-
-    const computerCard = document.createElement('div');
-    computerCard.textContent = `${computerPlayer.name}: ${computerPlayer.score}`;
-
-    scoreCard.append(playerCard);
-    scoreCard.append(computerCard);
+    document.getElementById('user-score').textContent = `${userPlayer.name}: ${userPlayer.score}`;
+    document.getElementById('computer-score').textContent = `${computerPlayer.name}: ${computerPlayer.score}`;
   }
 
 
@@ -261,16 +254,18 @@ const game = (() => {
         y = Math.floor(Math.random() * 3);
       } 
     }
-    //medium difficulty
-    if (difficulty === 'Medium') {
+    
+    if (difficulty === 'Hard') {
       // first try to place in the center
       if (gameBoard.grid[1][1] === '') {
         x = 1;
         y = 1;
       } else {
-        //if theres a win available, do it, next try to play a corner, otherwise do random.
-        if(AI.checkForWin()) {
-          [y, x] = AI.checkForWin();
+        //if theres a win available do it, then try to block a win from opponent, then try to play a corner, otherwise do random.
+        if(AI.checkForWin('O')) {
+          [y, x] = AI.checkForWin('O');
+        } else if(AI.checkForWin('X')) {
+          [y, x] = AI.checkForWin('X');
         } else if(AI.checkCorners()){
           [y, x] = AI.checkCorners();
         } else {
@@ -287,9 +282,9 @@ const game = (() => {
   }
 
   const startGame = () => {
-    //player goes first in even games, computer in odd games
     gameBoard.resetGrid();
     printCards();
+    //player goes first in even games, computer in odd games
     if (computerGoesFirst()) {
       computerMove();
       gameBoard.printGrid();
@@ -335,17 +330,18 @@ const game = (() => {
     document.getElementById('pop-up-name-form').style.display = 'flex';
   }
 
-  const changeName = (form) => {
-    alert(userPlayer.name);
+  const changeName = (e) => {
+    e.preventDefault();
+    userPlayer.changeName(e.target.name.value);
     hideNameForm();
-    userPlayer.changeName(form.name.value);
-    alert(userPlayer.name);
     printCards();
   }
 
   const toggleDifficulty = () => {
     if (difficulty === 'Easy') {
-      difficulty = "Medium";
+      difficulty = "Hard";
+    } else {
+      difficulty = 'Easy';
     }
     document.getElementById('difficulty-btn').textContent = `Difficulty: ${difficulty}`
   }
@@ -359,9 +355,7 @@ const game = (() => {
     hideNameForm,
     showNameForm,
     toggleDifficulty,
-    changeName,
-    userPlayer,
-    computerPlayer
+    changeName
   }
 })();
 
@@ -380,6 +374,8 @@ const deepCopy = (arr) => {
   })
   return copy;
 }
+
+document.getElementById('change-name-form').addEventListener('submit', game.changeName);
 
 
 game.startGame();
